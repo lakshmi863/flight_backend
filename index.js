@@ -14,13 +14,12 @@ const allowedOrigins = [
   'http://localhost:5173',    
   'http://localhost:3000',                // React frontend local
   'http://localhost:7000',                 // backend dev if needed
-  'https://flight-front-ten.vercel.app',  // deployed frontend
+  'https://flight-booking-system-spm0.onrender.com/', // deployed frontend
   'https://green-plant-06346c70f.1.azurestaticapps.net' // Azure static
 ];
 
 app.use(cors({
   origin: function(origin, callback){
-    // Allow requests with no origin (like mobile apps or curl)
     if(!origin) return callback(null, true);
     if(allowedOrigins.indexOf(origin) === -1){
       const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
@@ -31,6 +30,7 @@ app.use(cors({
   methods: ['GET','POST','PUT','DELETE'],
   credentials: true
 }));
+
 app.use(cors({
   origin: function(origin, callback){
     // Allow requests with no origin (like mobile apps or curl)
