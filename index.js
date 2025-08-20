@@ -11,12 +11,26 @@ const app = express();
 
 // Allow multiple origins
 const allowedOrigins = [
-  'http://localhost:7000',
-  'http://localhost:3004', // <-- Add this
-  'https://flight-front-ten.vercel.app',
-  'https://green-plant-06346c70f.1.azurestaticapps.net'
+  'http://localhost:5173',    
+  'http://localhost:3000',                // React frontend local
+  'http://localhost:7000',                 // backend dev if needed
+  'https://flight-front-ten.vercel.app',  // deployed frontend
+  'https://green-plant-06346c70f.1.azurestaticapps.net' // Azure static
 ];
 
+app.use(cors({
+  origin: function(origin, callback){
+    // Allow requests with no origin (like mobile apps or curl)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ['GET','POST','PUT','DELETE'],
+  credentials: true
+}));
 app.use(cors({
   origin: function(origin, callback){
     // Allow requests with no origin (like mobile apps or curl)

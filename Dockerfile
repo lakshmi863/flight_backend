@@ -1,20 +1,20 @@
-# Use official Node.js image
+# Use official Node image
 FROM node:18
 
-# Create app directory
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies inside container
+# Install dependencies inside container (rebuild native modules)
 RUN npm install
 
-# Copy rest of the application
+# Copy remaining code
 COPY . .
 
-# Expose your backend port
+# Expose port
 EXPOSE 7000
 
-# Start the backend
+# Start server
 CMD ["npm", "start"]
