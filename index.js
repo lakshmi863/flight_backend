@@ -9,41 +9,33 @@ const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 
-// Allow multiple origins
+// Allowed origins (remove trailing slashes)
 const allowedOrigins = [
-  'http://localhost:5173',    
-  'http://localhost:3000',                // React frontend local
-  'http://localhost:7000',                 // backend dev if needed
-  'https://flight-booking-system-spm0.onrender.com/', // deployed frontend
-  'https://green-plant-06346c70f.1.azurestaticapps.net' // Azure static
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:3004',   // add this line
+  'http://localhost:7000',
+  'https://flight-booking-system-spm0.onrender.com',
+  'https://green-plant-06346c70f.1.azurestaticapps.net'
 ];
 
+// CORS middleware
 app.use(cors({
-  origin: function(origin, callback){
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like Postman or mobile apps)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
       const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
       return callback(new Error(msg), false);
     }
-    return callback(null, true);
   },
   methods: ['GET','POST','PUT','DELETE'],
   credentials: true
 }));
 
-app.use(cors({
-  origin: function(origin, callback){
-    // Allow requests with no origin (like mobile apps or curl)
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  methods: ['GET','POST','PUT','DELETE'],
-  credentials: true
-}));
 app.use(express.json()); // Parse JSON bodies
 
 // Routes
