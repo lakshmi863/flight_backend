@@ -16,7 +16,8 @@ const allowedOrigins = [
   'http://localhost:3004',   // add this line
   'http://localhost:7000',
   'https://flight-booking-system-spm0.onrender.com',
-  'https://green-plant-06346c70f.1.azurestaticapps.net'
+  'https://proud-bay-09538c10f.1.azurestaticapps.net'
+  
 ];
 
 // CORS middleware
