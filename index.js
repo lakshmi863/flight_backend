@@ -38,6 +38,10 @@ app.use(cors({
 
 app.use(express.json()); // Parse JSON bodies
 
+app.get('/', (req, res) => {
+  res.status(200).send('Welcome to the Flight Booking API');
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/form', formRoutes);
