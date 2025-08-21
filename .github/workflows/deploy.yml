@@ -1,0 +1,54 @@
+name: Deploy Frontend and Backend to Azure
+
+on:
+  push:
+    branches:
+      - main   # Change if your default branch is differents
+
+jobs:
+  # ========================
+  # Frontend Deployment
+  # ========================
+  deploy-frontend:
+    name: Deploy React Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2 
+
+      - name: Build and Deploy Static Web App
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "/"          # path to frontend (if root folder has package.json)
+          output_location: "build"   # React build output folder
+
+  # ========================
+  # Backend Deployment
+  # ========================
+  deploy-backend:
+    name: Deploy Node Backend
+    runs-on: ubuntu-latest
+    needs: deploy-frontend   # ensures frontend deploys first (optional)
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'   # match your backend version
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./Backend   # git  change if backend folder is different
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: gofly                   # Your Azure App Service name
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./Backend                # git  change if backend folder is different
